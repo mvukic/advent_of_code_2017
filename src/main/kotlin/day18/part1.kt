@@ -1,108 +1,96 @@
 package day18
 
-import asFile
+import getLines
 
-fun main(args: Array<String>) {
+fun main() {
+  val registers: MutableMap<String, Int> = mutableMapOf()
+  val instructions: List<String> = getLines("Day18.txt")
 
-    val registers: MutableMap<String, Int> = mutableMapOf()
+  var index = 0
+  var lastFreq = 0
+  var first = true
+  while (true) {
+    if (index > instructions.size) break
 
-    val instructions = ClassLoader.getSystemClassLoader().getResource("Day18.txt").file
-            .asFile()
-            .readLines()
-            .toList()
-
-    var index = 0
-    var lastFreq = 0
-    var first = true
-    while(true){
-        if(index > instructions.size) break
-        val split = instructions[index].split(" ")
-        when (split[0]) {
-            "set" -> {
-                val register = split[1]
-                val valueOrReg = split[2].toIntOrNull() ?: split[2]
-                if(valueOrReg is Int){
-                    registers[register] = valueOrReg
-                } else {
-                    registers[register] = registers.getOrDefault(valueOrReg, 0)
-                }
-                index++
-            }
-            "add" -> {
-                val register = split[1]
-                val valueOrReg = split[2].toIntOrNull() ?: split[2]
-                val oldValue = registers.getOrDefault(register, 0)
-                if(valueOrReg is Int){
-                    registers[register] = oldValue + valueOrReg
-                } else {
-                    registers[register] = oldValue + registers.getOrDefault(valueOrReg, 0)
-                }
-                index++
-            }
-            "mul" -> {
-                val register = split[1]
-                val valueOrReg = split[2].toIntOrNull() ?: split[2]
-                val oldValue = registers.getOrDefault(register, 0)
-                if(valueOrReg is Int){
-                    registers[register] = oldValue * valueOrReg
-                } else {
-                    registers[register] = oldValue * registers.getOrDefault(valueOrReg, 0)
-                }
-                index++
-            }
-            "mod" -> {
-                val register = split[1]
-                val valueOrReg = split[2].toIntOrNull() ?: split[2]
-                val oldValue = registers.getOrDefault(register, 0)
-                if(valueOrReg is Int){
-                    registers[register] = oldValue % valueOrReg
-                } else {
-                    registers[register] = oldValue % registers.getOrDefault(valueOrReg, 0)
-                }
-                index++
-            }
-            "snd" -> {
-                val valueOrReg = split[1].toIntOrNull() ?: split[1]
-                if(valueOrReg is Int){
-                    lastFreq = valueOrReg
-                } else {
-                    lastFreq = registers.getOrDefault(valueOrReg, 0)
-                }
-                index++
-            }
-            "rcv" -> {
-                val reg1OrValue = split[1].toIntOrNull() ?: split[1]
-                if(reg1OrValue is Int) {
-                    if(reg1OrValue > 0 && first) {
-                        first = false
-                        println("Recover $lastFreq")
-                    }
-                } else {
-                    if(registers.getOrDefault(reg1OrValue, 0) > 0 && first) {
-                        first = false
-                        println("Recover $lastFreq")
-                    }
-                }
-                index++
-            }
-            "jgz" -> {
-                val reg1OrValue = split[1].toIntOrNull() ?: split[1]
-                val reg2OrValue = split[2].toIntOrNull() ?: split[2]
-                if(reg1OrValue is Int) {
-                    if(reg1OrValue > 0) {
-                        index += reg2OrValue as? Int ?: registers.getOrDefault(reg2OrValue, 0)
-                    } else {
-                        index++
-                    }
-                } else {
-                    if(registers.getOrDefault(reg1OrValue, 0) > 0) {
-                        index += reg2OrValue as? Int ?: registers.getOrDefault(reg2OrValue, 0)
-                    } else {
-                        index++
-                    }
-                }
-            }
+    val instructionParts = instructions[index].split(" ")
+    when (instructionParts[0]) {
+      "set" -> {
+        val register = instructionParts[1]
+        if (instructionParts[2].toIntOrNull() !== null) {
+          registers[register] = instructionParts[2].toInt()
+        } else {
+          registers[register] = registers.getOrDefault(instructionParts[2], 0)
         }
+        index++
+      }
+      "add" -> {
+        val register = instructionParts[1]
+        val oldValue = registers.getOrDefault(register, 0)
+        if (instructionParts[2].toIntOrNull() !== null) {
+          registers[register] = oldValue + instructionParts[2].toInt()
+        } else {
+          registers[register] = oldValue + registers.getOrDefault(instructionParts[2], 0)
+        }
+        index++
+      }
+      "mul" -> {
+        val register = instructionParts[1]
+        val oldValue = registers.getOrDefault(register, 0)
+        if (instructionParts[2].toIntOrNull() !== null) {
+          registers[register] = oldValue * instructionParts[2].toInt()
+        } else {
+          registers[register] = oldValue * registers.getOrDefault(instructionParts[2], 0)
+        }
+        index++
+      }
+      "mod" -> {
+        val register = instructionParts[1]
+        val oldValue = registers.getOrDefault(register, 0)
+        if (instructionParts[2].toIntOrNull() !== null) {
+          registers[register] = oldValue % instructionParts[2].toInt()
+        } else {
+          registers[register] = oldValue % registers.getOrDefault(instructionParts[2], 0)
+        }
+        index++
+      }
+      "snd" -> {
+        lastFreq = if (instructionParts[1].toIntOrNull() !== null) {
+          instructionParts[1].toInt()
+        } else {
+          registers.getOrDefault(instructionParts[1], 0)
+        }
+        index++
+      }
+      "rcv" -> {
+        if (instructionParts[1].toIntOrNull() !== null) {
+          if (instructionParts[1].toInt() > 0 && first) {
+            first = false
+            println("Recover $lastFreq")
+          }
+        } else {
+          if (registers.getOrDefault(instructionParts[1], 0) > 0 && first) {
+            first = false
+            println("Recover $lastFreq")
+          }
+        }
+        index++
+      }
+      "jgz" -> {
+        if (instructionParts[1].toIntOrNull() !== null) {
+          if (instructionParts[1].toInt() > 0) {
+            index += if(instructionParts[2].toIntOrNull() !== null) instructionParts[2].toInt() else registers.getOrDefault(instructionParts[2], 0)
+          } else {
+            index++
+          }
+        } else {
+          if (registers.getOrDefault(instructionParts[1], 0) > 0) {
+            index += if(instructionParts[2].toIntOrNull() !== null) instructionParts[2].toInt() else registers.getOrDefault(instructionParts[2], 0)
+          } else {
+            index++
+          }
+        }
+      }
     }
+  }
 
 }

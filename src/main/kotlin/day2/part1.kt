@@ -1,21 +1,12 @@
 package day2
 
-import asFile
+import getLines
 
-
-fun main(args: Array<String>) {
-
-    val sum = ClassLoader.getSystemClassLoader().getResource("Day2.txt").file
-            .asFile()
-            .readLines()
-            .map {
-                it.split("\\s+".toRegex()).map {
-                    it.toInt()
-                }
-            }.map{
-                it.max()!! - it.min()!!
-            }.sum()
-
-    println("Sum is: $sum")
-
+fun main() {
+  val sum = getLines("Day2.txt")
+    .map { line -> line.split("\\s+".toRegex()).map { it.toInt() } }
+    .map {numbers -> Pair(numbers.maxOrNull() ?: 0, numbers.minOrNull() ?: 0) }
+    .map { it.first - it.second }
+    .sum()
+  println("Sum is: $sum")
 }
