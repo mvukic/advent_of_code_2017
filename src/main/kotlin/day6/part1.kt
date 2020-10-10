@@ -22,7 +22,7 @@ fun main() {
     // save current combination
     combinations.add(memoryBanks.joinToString())
 
-    var (mostBlocksIndex, blocksBuffer) = memoryBanks.withIndex().maxBy { it.value }!!
+    var (mostBlocksIndex, blocksBuffer) = memoryBanks.withIndex().maxByOrNull { it.value }!!
 
     // clear blocks from selected bank
     memoryBanks[mostBlocksIndex] = 0

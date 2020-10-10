@@ -1,12 +1,11 @@
 package day8
 
-import asFile
 import getLines
 
 fun main() {
   val instructions = parse(getLines("Day8.txt"))
   val registers = run(instructions)
-  println("Max value is ${registers.values.max()}")
+  println("Max value is ${registers.values.maxOrNull()}")
 }
 
 private fun parse(lines: List<String>): List<Instruction> {
