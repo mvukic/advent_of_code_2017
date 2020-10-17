@@ -36,7 +36,8 @@ fun main() {
         }
         it.startsWith("p") -> {
           val byName: Pair<Char, Char> =
-            it.takeLast(it.length - 1).split("/").zipWithNext { a, b -> Pair(a.toCharArray()[0], b.toCharArray()[0]) }[0]
+            it.takeLast(it.length - 1).split("/")
+              .zipWithNext { a, b -> Pair(a.toCharArray()[0], b.toCharArray()[0]) }[0]
           programs.swapAtNames<Char>(byName)
         }
       }

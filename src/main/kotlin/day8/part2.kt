@@ -1,6 +1,5 @@
 package day8
 
-import asFile
 import getLines
 
 fun main() {

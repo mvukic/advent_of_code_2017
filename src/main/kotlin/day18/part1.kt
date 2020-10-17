@@ -78,13 +78,19 @@ fun main() {
       "jgz" -> {
         if (instructionParts[1].toIntOrNull() !== null) {
           if (instructionParts[1].toInt() > 0) {
-            index += if(instructionParts[2].toIntOrNull() !== null) instructionParts[2].toInt() else registers.getOrDefault(instructionParts[2], 0)
+            index += if (instructionParts[2].toIntOrNull() !== null) instructionParts[2].toInt() else registers.getOrDefault(
+              instructionParts[2],
+              0
+            )
           } else {
             index++
           }
         } else {
           if (registers.getOrDefault(instructionParts[1], 0) > 0) {
-            index += if(instructionParts[2].toIntOrNull() !== null) instructionParts[2].toInt() else registers.getOrDefault(instructionParts[2], 0)
+            index += if (instructionParts[2].toIntOrNull() !== null) instructionParts[2].toInt() else registers.getOrDefault(
+              instructionParts[2],
+              0
+            )
           } else {
             index++
           }

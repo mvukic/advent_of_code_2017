@@ -5,7 +5,7 @@ import getLines
 fun main() {
 
   val sum = getLines("Day2.txt")
-    .map {line -> line.split("\\s+".toRegex()).map { it.toInt() } }
+    .map { line -> line.split("\\s+".toRegex()).map { it.toInt() } }
     .map { onlyTwoDivisible(it) }
     .sum()
   println("Sum is $sum")

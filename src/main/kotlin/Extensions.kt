@@ -17,5 +17,5 @@ fun <T> MutableList<Char>.swapAtNames(names: Pair<Char, Char>) {
 }
 
 fun getLines(name: String): List<String> {
-  return  ClassLoader.getSystemClassLoader().getResource(name)!!.file.asFile().readLines().toList()
+  return ClassLoader.getSystemClassLoader().getResource(name)!!.file.asFile().readLines().toList()
 }
